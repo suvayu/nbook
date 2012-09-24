@@ -155,7 +155,7 @@ class AddressHeaders(object):
             output += fmtstr % (addr[0].strip('<>'), addr[1])
         # FIXME: remove trailing newline
         # output.rstrip('\n') # doesn't work'
-        return output
+        return output.encode('utf-8')
 ## End of class definition
 
 
