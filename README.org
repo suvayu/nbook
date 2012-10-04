@@ -1,0 +1,37 @@
+#+TITLE:     README file for =nbook=
+#+AUTHOR:    Suvayu Ali
+#+DATE:      2012-10-04 Thu
+
+* About =nbook=
+This program serves as an address book based on notmuch queries.
+
+=nbook= allows the user to query a notmuch database for email
+addresses.  It looks in the ~to:~, ~from:~ and ~cc:~ headers of the
+email messages for matches.  Unique matching email addresses are
+printed on the terminal.  The purpose of the program is to serve as a
+search based address book.  It is designed to replicate the abook
+program, for use with text based email clients like mutt.
+
+The underlying idea to use search queries as an address book was
+inspired by /Gmail/.  The idea to use email indexers (like =notmuch=)
+to extract the email addresses was conceived by Dirk-Jan C. Binnema,
+author of =mu= (a notmuch inspired email indexer) and =mu4e= (an Emacs
+based email client for mu).  Since the inspiration was the /Gmail/
+interface, the name and email matching is done case-insensitively.
+
+I hope you enjoy this little utility.
+
+* Usage with Mutt
+: set query_command = "nbook '%s'"
+
+* Note
+=nbook= requires _Python 2.7 or higher_ as it depends on the
+=argparse= module for option parsing.
+
+* Issues
+=nbook= has a severe unresolved issue: [[https://github.com/suvayu/nbook/issues/3][#3]].
+
+* Alternatives
+When I wrote this I was unaware there were similar (much smarter)
+utilities already out there.  You can find more information in [[http://thread.gmane.org/gmane.mail.notmuch.general/12452][this
+thread]].
