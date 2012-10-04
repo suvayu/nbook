@@ -29,10 +29,12 @@ The underlying idea to use search queries as an address book was
 inspired by Gmail.  The idea to use email indexers (like notmuch) to
 extract the email addresses was conceived by Dirk-Jan C. Binnema,
 author of mu (a notmuch inspired email indexer) and mu4e (an Emacs
-based email client for mu).
+based email client for mu).  Since the inspiration was the Gmail
+interface, the name and email matching is done case-insensitively.
 
 Usage with Mutt: To use with Mutt, set $query_command to "nbook '%s'"
 
+Note: `nbook' requires Python 2.7 or higher as it depends on argparse
 
 Author: Suvayu Ali
 
