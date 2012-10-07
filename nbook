@@ -100,10 +100,10 @@ class AddressHeaders(object):
         qtokens = query.lower().split()
         addrstr = ' '.join(addr).lower()
         count = 0
+        # FIXME: faster algorithm
         for token in qtokens:
             if token in addrstr:
                 count += 1
-            # print count, token, addrstr
         return count == len(qtokens)
 
     def __uniquify_addrs__(self, addrs):
@@ -111,6 +111,7 @@ class AddressHeaders(object):
         addrs.sort()
         # FIXME: protect against empty results
         last = addrs[-1]
+        # FIXME: cleaner & faster code
         for i in range(len(addrs) - 2, -1, -1):
             if last[0].lower() == addrs[i][0].lower():
                 del addrs[i]
