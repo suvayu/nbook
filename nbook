@@ -77,8 +77,7 @@ class AddressHeaders(object):
     def __init__(self, msgs, query=''):
         self.__query__ = query
         try:
-            itr = iter(msgs)
-            for msg in itr:
+            for msg in msgs:
                 self.__fromhdr__ += ',' + msg.get_header('from')
                 self.__tohdr__ += ',' + msg.get_header('to')
                 self.__cchdr__ += ',' + msg.get_header('cc')
