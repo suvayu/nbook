@@ -94,7 +94,7 @@ class AddressHeaders(object):
                 self.__tohdr__ = msg.get_header('to')
                 self.__cchdr__ = msg.get_header('cc')
             else:
-                raise TypeError
+                raise TypeError('`msgs\' should be notmuch.message.Message or a container')
 
     def __filter_addrs__(self, query, addr):
         """Filter function to select messages matching pattern."""
