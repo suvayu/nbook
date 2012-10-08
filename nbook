@@ -70,21 +70,12 @@ class AddressHeaders(object):
 
     """
 
-    __fromhdr__ = ''
-    __tohdr__   = ''
-    __cchdr__   = ''
-
     def __init__(self, msgs, query=''):
         self.__query__ = query
         try:
-            for msg in msgs:
-                self.__fromhdr__ += ',' + msg.get_header('from')
-                self.__tohdr__ += ',' + msg.get_header('to')
-                self.__cchdr__ += ',' + msg.get_header('cc')
-
-            self.__fromhdr__.strip(',')
-            self.__tohdr__.strip(',')
-            self.__cchdr__.strip(',')
+            self.__fromhdr__ = ','.join([msg.get_header('from') for msg in msgs])
+            self.__tohdr__ = ','.join([msg.get_header('to') for msg in msgs])
+            self.__cchdr__ = ','.join([msg.get_header('cc') for msg in msgs])
 
         except TypeError:
             if isinstance(msgs, message.Message):
