@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # coding=utf-8
 #
 # Copyright (C) 2012 by Suvayu Ali
@@ -51,13 +51,17 @@ if pyversion < 2.7:
 
 import argparse
 
-optparser = argparse.ArgumentParser(description=__doc__)
+optparser = argparse.ArgumentParser(description=__doc__,
+                                    epilog="Try it this way:\n   nbook  -p \"`date --date \'now -180 days\' +%s`..`date +%s` and\" john")
+
 optparser.formatter_class = argparse.RawDescriptionHelpFormatter
+optparser.add_argument("-p", "--prefix", dest="prefix",
+                  help="Add a prefix to the query", metavar="QUERY")
 optparser.add_argument('querystr', nargs='+',
                        help='Query string, matched agains address headers')
 options = optparser.parse_args()
+queryprefix = options.prefix if options.prefix is not None else ''
 querystr = ' '.join(options.querystr)
-
 
 from notmuch import *
 
@@ -172,7 +176,7 @@ class AddressHeaders(object):
 
 # Search
 db = Database()
-query = Query(db, 'from:"{0}" or to:"{0}"'.format(querystr))
+query = Query(db, '{1} (from:"{0}" or to:"{0}")'.format(querystr,queryprefix))
 msgs = list(query.search_messages())
 
 addresses = AddressHeaders(msgs, querystr)
