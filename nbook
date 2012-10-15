@@ -72,9 +72,17 @@ class AddressHeaders(object):
     def __init__(self, msgs, query=''):
         self.__query__ = query
         try:
-            self.__fromhdr__ = ','.join([msg.get_header('from') for msg in msgs])
-            self.__tohdr__ = ','.join([msg.get_header('to') for msg in msgs])
-            self.__cchdr__ = ','.join([msg.get_header('cc') for msg in msgs])
+            frlist = []
+            tolist = []
+            cclist = []
+            for msg in msgs:
+                frlist += [msg.get_header('from')]
+                tolist += [msg.get_header('to')]
+                cclist += [msg.get_header('cc')]
+
+            self.__fromhdr__ = ','.join(frlist)
+            self.__tohdr__ = ','.join(tolist)
+            self.__cchdr__ = ','.join(cclist)
 
         except TypeError:
             if isinstance(msgs, message.Message):
@@ -163,7 +171,7 @@ class AddressHeaders(object):
 # Search
 db = Database()
 query = Query(db, 'from:"{0}" or to:"{0}"'.format(querystr))
-msgs = list(query.search_messages())
+msgs = query.search_messages()
 
 addresses = AddressHeaders(msgs, querystr)
 print addresses
