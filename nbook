@@ -58,7 +58,7 @@ options = optparser.parse_args()
 querystr = ' '.join(options.querystr)
 
 
-from notmuch import *
+from notmuch import Database, Query, message
 
 ## Class definition
 class AddressHeaders(object):
@@ -145,10 +145,10 @@ class AddressHeaders(object):
         # return list(set((maddrs)))
         return self.__uniquify_addrs__(maddrs)
 
-    def print_addrs(self, fmtstr='', query=''):
+    def print_addrs(self, fmtstr='%s\t%s\n', query=''):
         """Print formatted addresses"""
-        if '' == fmtstr: fmtstr = '%s\t%s\n'
-        if '' == query: query = self.__query__
+        if query == '':
+            query = self.__query__
         addrs = self.find_addrs(query)
         if not addrs: addrs = []
         output = '%d unique email addresses found for `%s\'\n' % (len(addrs), query)
