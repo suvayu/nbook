@@ -43,8 +43,7 @@ Author: Suvayu Ali
 
 import sys
 
-pyversion = float('%d.%d' % (sys.version_info.major, sys.version_info.minor))
-if pyversion < 2.7:
+if (sys.version_info.major <= 2 and sys.version_info.minor < 7):
     print '`nbook\' needs Python 2.7 or higher for argparse'
     exit(-1)
 
