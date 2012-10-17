@@ -44,18 +44,16 @@ Author: Suvayu Ali
 import sys
 
 if (sys.version_info.major <= 2 and sys.version_info.minor < 7):
-    print '`nbook\' needs Python 2.7 or higher for argparse'
-    exit(-1)
+    sys.exit('`nbook\' needs Python 2.7 or higher for argparse')
 
 
 import argparse
 
 optparser = argparse.ArgumentParser(description=__doc__,
-                                    epilog="Try it this way:\n   nbook  -p \"`date --date \'now -180 days\' +%s`..`date +%s` and\" john")
-
+                                    epilog='Example: nbook -p "$(date --date \'now -180 days\' +%%s)..$(date +%%s) and" john')
 optparser.formatter_class = argparse.RawDescriptionHelpFormatter
-optparser.add_argument("-p", "--prefix", dest="prefix",
-                  help="Add a prefix to the query", metavar="QUERY")
+optparser.add_argument('-p', '--prefix', dest='prefix', metavar='QUERY',
+                       help='Add a prefix to the query')
 optparser.add_argument('querystr', nargs='+',
                        help='Query string, matched agains address headers')
 options = optparser.parse_args()
@@ -110,7 +108,6 @@ class AddressHeaders(object):
         return count == len(qtokens)
 
     def __uniquify_addrs__(self, addrs):
-        if not addrs: return None
         addrs.sort()
         # FIXME: protect against empty results
         last = addrs[-1]
@@ -127,20 +124,26 @@ class AddressHeaders(object):
     def __str__(self):
         return self.print_addrs()
 
+    def __getaddrshdr__(self, hdr='from'):
+        if hdr == 'from':
+            addrs = [addr.rsplit(' ', 1) for addr in self.__fromhdr__.split(',')]
+        elif hdr == 'to':
+            addrs = [addr.rsplit(' ', 1) for addr in self.__tohdr__.split(',')]
+        elif hdr == 'cc':
+            addrs = [addr.rsplit(' ', 1) for addr in self.__cchdr__.split(',')]
+        return [[addr[-1], addr[0].strip(' "')] for addr in addrs]
+
     def fromaddrs(self):
         """Return a list with all the from addresses."""
-        addrs = [addr.rsplit(' ', 1) for addr in self.__fromhdr__.split(',')]
-        return [[addr[-1], addr[0].strip(' "')] for addr in addrs]
+        return self.__getaddrshdr__('from')
 
     def toaddrs(self):
         """Return a list with all the to addresses."""
-        addrs = [addr.rsplit(' ', 1) for addr in self.__tohdr__.split(',')]
-        return [[addr[-1], addr[0].strip(' "')] for addr in addrs]
+        return self.__getaddrshdr__('to')
 
     def ccaddrs(self):
         """Return a list with all the cc addresses."""
-        addrs = [addr.rsplit(' ', 1) for addr in self.__cchdr__.split(',')]
-        return [[addr[-1], addr[0].strip(' "')] for addr in addrs]
+        return self.__getaddrshdr__('cc')
 
     def add_msg(self, msg):
         """Add a message to the address header collection."""
@@ -153,10 +156,12 @@ class AddressHeaders(object):
         addrs = self.fromaddrs()
         addrs += self.toaddrs()
         addrs += self.ccaddrs()
-        if '' == query: query = '%s' % self.__query__
+        if query == '':
+            query = self.__query__
         maddrs = [ addr for addr in addrs if self.__filter_addrs__(query, addr) ]
-        # return list(set((maddrs)))
         return self.__uniquify_addrs__(maddrs)
+        # FIXME: Why does this not work?
+        # return list(set((maddrs)))
 
     def print_addrs(self, fmtstr='%s\t%s\n', query=''):
         """Print formatted addresses"""
@@ -175,7 +180,7 @@ class AddressHeaders(object):
 
 # Search
 db = Database()
-query = Query(db, '{1} (from:"{0}" or to:"{0}")'.format(querystr,queryprefix))
+query = Query(db, '{1} (from:"{0}" or to:"{0}")'.format(querystr, queryprefix))
 msgs = query.search_messages()
 
 addresses = AddressHeaders(msgs, querystr)
