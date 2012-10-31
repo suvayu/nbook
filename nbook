@@ -109,16 +109,16 @@ class AddressHeaders(object):
 
     def __uniquify_addrs__(self, addrs):
         addrs.sort()
-        # FIXME: protect against empty results
-        last = addrs[-1]
-        # FIXME: cleaner & faster code
-        for i in range(len(addrs) - 2, -1, -1):
-            if last[0].lower() == addrs[i][0].lower():
-                del addrs[i]
-            else:
-                last = addrs[i]
-        # FIXME: why does the line below not work
-        # return list(set(addrs))
+        if addrs:
+            last = addrs[-1]
+            # FIXME: cleaner & faster code
+            for i in range(len(addrs) - 2, -1, -1):
+                if last[0].lower() == addrs[i][0].lower():
+                    del addrs[i]
+                else:
+                    last = addrs[i]
+            # FIXME: why does the line below not work
+            # return list(set(addrs))
         return addrs
 
     def __str__(self):
