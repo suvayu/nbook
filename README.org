@@ -29,7 +29,8 @@ I hope you enjoy this little utility.
 =argparse= module for option parsing.
 
 * Issues
-=nbook= has a severe unresolved issue: [[https://github.com/suvayu/nbook/issues/3][#3]].
+There performance issues for large email indexes.  There are plans to
+implement a cacheing database in the future.
 
 * Alternatives
 When I wrote this I was unaware there were similar (much smarter)
